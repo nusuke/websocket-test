@@ -12,10 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
 class GreetingController {
-
-    @Autowired
-    lateinit var simpMessagingTemplate: SimpMessagingTemplate
-
     @MessageMapping("/hello") // クライアントは、setApplicationDestinationPrefixes / helloで指定。
     @SendTo("/topic/greetings") // 返り値をこちらのトピックに送信
     fun greeting(@Payload payload: String): String {
@@ -24,14 +20,16 @@ class GreetingController {
         return "サーバからこんにちは"
     }
 
+    @Autowired
+    lateinit var simpMessagingTemplate: SimpMessagingTemplate
     @PutMapping("/test/hello")
     @ResponseBody
-    fun hello(@RequestBody parameter: HelloParam): String {
+    fun hello(@RequestBody parameter: TestHelloParam): String {
         println("PUTで受け取った場合、subscribeしているクライアントに一斉送信")
         val message = "hello," + (parameter.name ?: "デフォルト名")
         simpMessagingTemplate.convertAndSend("/topic/greetings", message)
         return "OK"
     }
 
-    data class HelloParam(val name: String? = null)
+    data class TestHelloParam(val name: String? = null)
 }

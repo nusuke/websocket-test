@@ -11,7 +11,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 class WebSocketConfig: WebSocketMessageBrokerConfigurer {
 
     override fun configureMessageBroker(config: MessageBrokerRegistry){
-        //
         config.enableSimpleBroker("/topic")
         // クライアントがメッセージをサーバーに送信するときに使用するprefix
         config.setApplicationDestinationPrefixes("/app")
